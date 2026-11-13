@@ -9,20 +9,27 @@ from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 
 def load_sec_filing(ticker="SBUX"):
-    with open("data/data.json", "r") as f:
-        filings = json.load(f)
-        
+    # Use the Raw GitHub URL format for data.json
+    json_url = "https://raw.githubusercontent.com/yhh1994/10q/main/data.json"
+    
+    print(f"Fetching filing registry from online repository...")
+    response = requests.get(json_url)
+    response.raise_for_status()
+    filings = response.json()
+    
+    # Find the matching entry for the ticker
     target = next((item for item in filings if item["ticker"] == ticker), None)
     if not target:
-        raise ValueError(f"Ticker {ticker} not found in data.json")
+        raise ValueError(f"Ticker {ticker} not found in remote data.json")
         
     print(f"Fetching SEC filing for {target['title']} from {target['link']}...")
     
+    # SEC requires a descriptive User-Agent header
     headers = {"User-Agent": "FinancialRAGAgent research@example.com"}
-    response = requests.get(target["link"], headers=headers)
-    response.raise_for_status()
+    sec_response = requests.get(target["link"], headers=headers)
+    sec_response.raise_for_status()
     
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(sec_response.text, "html.parser")
     return soup.get_text(), target
 
 def main():
