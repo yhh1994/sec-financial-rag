@@ -48,24 +48,49 @@ def main():
         texts=[raw_text], 
         metadatas=[{"ticker": filing_meta["ticker"], "form": filing_meta["form"]}]
     )
+    
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
     print(f"Total chunks: {len(docs)}")
     print(f"Longest chunk: {max(len(d.page_content) for d in docs)} characters")
     
     print("Testing embeddings on actual SEC chunks...")
-    
+    '''
     test_embeddings = embeddings.embed_documents(
         [doc.page_content for doc in docs[:10]]
     )
     
     print(f"Successfully embedded {len(test_embeddings)} chunks")
-
+    '''
     print("Generating local embeddings with nomic-embed-text...")
     # Using your newly pulled embedding model
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    #embeddings = OllamaEmbeddings(model="nomic-embed-text")
     
     # Store locally in ChromaDB
-    vectorstore = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
+    print("Creating ChromaDB vector store...")
+
+    batch_size = 16
+    
+    vectorstore = Chroma(
+        collection_name="sec_filings",
+        embedding_function=embeddings,
+        persist_directory="./chroma_db_test"
+    )
+    
+    for i in range(0, len(docs), batch_size):
+        batch = docs[i:i + batch_size]
+    
+        print(
+            f"Embedding and storing chunks "
+            f"{i + 1}-{min(i + batch_size, len(docs))} "
+            f"of {len(docs)}..."
+        )
+    
+        vectorstore.add_documents(
+            documents=batch,
+            ids=[f"SBUX_10K_{j}" for j in range(i, i + len(batch))]
+        )
+    
+    print("All SEC chunks successfully stored in ChromaDB!")
     retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
     
     print("Initializing local LLM with llama3...")
