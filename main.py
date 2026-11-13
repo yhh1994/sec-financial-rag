@@ -48,7 +48,18 @@ def main():
         texts=[raw_text], 
         metadatas=[{"ticker": filing_meta["ticker"], "form": filing_meta["form"]}]
     )
+
+    print(f"Total chunks: {len(docs)}")
+    print(f"Longest chunk: {max(len(d.page_content) for d in docs)} characters")
     
+    print("Testing embeddings on actual SEC chunks...")
+    
+    test_embeddings = embeddings.embed_documents(
+        [doc.page_content for doc in docs[:10]]
+    )
+    
+    print(f"Successfully embedded {len(test_embeddings)} chunks")
+
     print("Generating local embeddings with nomic-embed-text...")
     # Using your newly pulled embedding model
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
