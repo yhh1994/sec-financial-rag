@@ -48,7 +48,7 @@ def main():
         texts=[raw_text], 
         metadatas=[{"ticker": filing_meta["ticker"], "form": filing_meta["form"]}]
     )
-
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
     print(f"Total chunks: {len(docs)}")
     print(f"Longest chunk: {max(len(d.page_content) for d in docs)} characters")
     
