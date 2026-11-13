@@ -5,7 +5,7 @@ import requests
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import ChatOllama
 from langchain_ollama import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_classic.chains import RetrievalQA
 
 def load_sec_filing(ticker="SBUX"):
