@@ -6,7 +6,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import ChatOllama
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain.chains import RetrievalQA
 
 def load_sec_filing(ticker="SBUX"):
     # Use the Raw GitHub URL format for data.json
