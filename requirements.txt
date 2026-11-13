@@ -4,4 +4,5 @@ langchain-community
 chromadb
 langchain-text-splitters
 beautifulsoup4
+langchain-classic
 requests
