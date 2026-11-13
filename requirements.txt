@@ -1,5 +1,6 @@
 langchain
 langchain-community
 chromadb
+langchain-text-splitters
 beautifulsoup4
 requests
