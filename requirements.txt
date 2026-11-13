@@ -1,7 +1,8 @@
 langchain-ollama
 langchain
-langchain-community
+langchain-core
 chromadb
+langchain-chroma
 langchain-text-splitters
 beautifulsoup4
 langchain-classic
