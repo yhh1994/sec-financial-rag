@@ -52,9 +52,9 @@ def main():
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
     print(f"Total chunks: {len(docs)}")
     print(f"Longest chunk: {max(len(d.page_content) for d in docs)} characters")
-    
-    print("Testing embeddings on actual SEC chunks...")
     '''
+    print("Testing embeddings on actual SEC chunks...")
+    
     test_embeddings = embeddings.embed_documents(
         [doc.page_content for doc in docs[:10]]
     )
@@ -78,13 +78,13 @@ def main():
     
     for i in range(0, len(docs), batch_size):
         batch = docs[i:i + batch_size]
-    
+        '''
         print(
             f"Embedding and storing chunks "
             f"{i + 1}-{min(i + batch_size, len(docs))} "
             f"of {len(docs)}..."
         )
-    
+        '''
         vectorstore.add_documents(
             documents=batch,
             ids=[f"SBUX_10K_{j}" for j in range(i, i + len(batch))]
